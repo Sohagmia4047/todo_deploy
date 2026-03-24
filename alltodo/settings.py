@@ -46,6 +46,10 @@ INTERNAL_IPS = ["127.0.0.1"]
 
 ROOT_URLCONF = "alltodo.urls"
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.onrender.com",
+]
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
