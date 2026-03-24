@@ -30,18 +30,23 @@
     box-sizing: border-box;
 }
 
+html {
+    overflow-x: hidden;
+}
+
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     background: var(--bg);
     color: var(--text);
-    padding: 10px;
+    padding: 12px;
     transition: 0.3s ease;
     font-size: 14px;
+    overflow-x: hidden;
 }
 
 .container {
     width: 100%;
-    max-width: 980px;
+    max-width: 1100px;
     margin: 0 auto;
 }
 
@@ -60,10 +65,11 @@ body {
     align-items: flex-start;
     gap: 14px;
     margin-bottom: 16px;
+    flex-wrap: wrap;
 }
 
 .heading-wrap {
-    flex: 1;
+    flex: 1 1 300px;
     min-width: 0;
 }
 
@@ -111,15 +117,16 @@ body {
 }
 
 .search-grid {
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.2fr) 130px 100px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .form-grid {
-    grid-template-columns: minmax(0, 2fr) minmax(0, 1.1fr) minmax(0, 1.15fr) minmax(0, 0.9fr) 100px 100px;
+    grid-template-columns: 2fr 1.2fr 1.2fr 1fr auto auto;
 }
 
 .field-group {
     width: 100%;
+    min-width: 0;
 }
 
 input {
@@ -161,6 +168,7 @@ input:focus {
     transition: 0.25s ease;
     font-size: 13px;
     font-weight: 500;
+    min-width: 110px;
 }
 
 .file-upload:hover {
@@ -173,7 +181,8 @@ input:focus {
 }
 
 .btn,
-.reset-link {
+.reset-link,
+.clear-btn {
     min-height: 42px;
     padding: 8px 14px;
     border-radius: 10px;
@@ -220,13 +229,15 @@ input:focus {
 
 .show-part {
     display: flex;
+    align-items: stretch;
     justify-content: space-between;
-    gap: 12px;
+    gap: 14px;
     border: 1px solid var(--border);
     border-radius: 14px;
     padding: 12px;
     margin-bottom: 12px;
     background: var(--card);
+    flex-wrap: wrap;
 }
 
 .show-part:last-child {
@@ -239,7 +250,7 @@ input:focus {
 }
 
 .left {
-    flex: 1 1 auto;
+    flex: 1 1 520px;
     min-width: 0;
 }
 
@@ -248,14 +259,19 @@ input:focus {
     gap: 12px;
     align-items: center;
     width: 100%;
+    min-width: 0;
 }
 
 .todo-item-left {
     display: flex;
     gap: 10px;
     align-items: flex-start;
-    flex: 1;
+    flex: 1 1 auto;
     min-width: 0;
+}
+
+.todo-check {
+    flex-shrink: 0;
 }
 
 .todo-check input {
@@ -287,18 +303,19 @@ input:focus {
 }
 
 .todo-content {
-    flex: 1;
+    flex: 1 1 auto;
     min-width: 0;
 }
 
 .title {
     display: inline-block;
-    font-size: 0.92rem;
+    font-size: 0.95rem;
     font-weight: 600;
     color: var(--text);
     cursor: pointer;
     margin-bottom: 6px;
     word-break: break-word;
+    line-height: 1.45;
 }
 
 .title:hover {
@@ -348,8 +365,8 @@ input:focus {
 }
 
 .right {
-    width: 290px;
-    flex-shrink: 0;
+    flex: 0 1 280px;
+    min-width: 220px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -379,6 +396,7 @@ input:focus {
     align-items: center;
     font-size: 11px;
     text-transform: uppercase;
+    background: var(--card-soft);
 }
 
 .deadline-format h4 {
@@ -397,7 +415,7 @@ input:focus {
 
 .right-control {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
 }
 
@@ -414,6 +432,7 @@ input:focus {
     justify-content: center;
     transition: 0.25s ease;
     color: white;
+    min-width: 0;
 }
 
 .green {
@@ -436,6 +455,7 @@ input:focus {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    max-width: calc(100vw - 24px);
 }
 
 .toast {
@@ -446,6 +466,7 @@ input:focus {
     box-shadow: var(--shadow);
     transition: 0.5s ease;
     font-size: 13px;
+    word-break: break-word;
 }
 
 .toast.error {
@@ -555,7 +576,7 @@ input:focus {
     font-size: 13px;
 }
 
-/* Tablet */
+/* Large tablet */
 @media (max-width: 992px) {
     .container {
         max-width: 860px;
@@ -573,8 +594,14 @@ input:focus {
         flex-direction: column;
     }
 
+    .left,
     .right {
         width: 100%;
+        min-width: 0;
+    }
+
+    .right {
+        flex: 1 1 auto;
     }
 
     .right-time {
@@ -650,16 +677,17 @@ input:focus {
     .todo-image,
     .todo-image img {
         width: 100%;
-        height: 150px;
+        height: 180px;
     }
 
     .right {
         width: 100%;
+        min-width: 0;
     }
 
     .deadline {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         width: 100%;
     }
 
@@ -673,7 +701,9 @@ input:focus {
 
     .btn-outline,
     .btn,
-    .reset-link {
+    .reset-link,
+    .clear-btn,
+    .file-upload {
         width: 100%;
     }
 
