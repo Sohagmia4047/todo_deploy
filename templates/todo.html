@@ -3,8 +3,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Todo App</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/todo.css' %}">
@@ -13,7 +13,6 @@
 
 <div class="container">
 
-    <!-- Toast Messages -->
     <div id="toast-container">
         {% if messages %}
             {% for message in messages %}
@@ -24,9 +23,7 @@
         {% endif %}
     </div>
 
-    <!-- Form Section -->
     <section class="form-section">
-
         <div class="form-topbar">
             <div class="heading-wrap">
                 <h2 class="head-title">Add New Task</h2>
@@ -43,7 +40,6 @@
             </div>
         </div>
 
-        <!-- Search Form -->
         <div class="section-card search-card">
             <form method="get" action="{% url 'todo_view' %}" class="search-form">
                 <div class="section-label">Search Tasks</div>
@@ -82,7 +78,6 @@
             </form>
         </div>
 
-        <!-- Add / Update Form -->
         <div class="section-card add-card">
             <form method="post" action="{% url 'todo_view' %}" enctype="multipart/form-data" id="todoForm">
                 {% csrf_token %}
@@ -129,7 +124,6 @@
         </div>
     </section>
 
-    <!-- Todo List -->
     <div class="todo-list-container">
         {% for todo in all_todo %}
         <div class="show-part {% if todo.done %}completed{% endif %}">
@@ -165,9 +159,9 @@
 
                     <div class="todo-item-right">
                         {% if todo.image %}
-                        <span class="todo-image">
-                            <img src="{{ todo.image.url }}" alt="{{ todo.title }}">
-                        </span>
+                            <span class="todo-image">
+                                <img src="{{ todo.image.url }}" alt="{{ todo.title }}">
+                            </span>
                         {% endif %}
                     </div>
                 </div>
@@ -177,10 +171,22 @@
                 <div class="right-time">
                     {% if not todo.done %}
                     <div class="deadline" data-endtime="{{ todo.end_time|date:'c' }}">
-                        <div class="deadline-format"><h4 class="days">0</h4><span>days</span></div>
-                        <div class="deadline-format"><h4 class="hours">0</h4><span>hrs</span></div>
-                        <div class="deadline-format"><h4 class="minutes">0</h4><span>min</span></div>
-                        <div class="deadline-format"><h4 class="seconds">0</h4><span>sec</span></div>
+                        <div class="deadline-format">
+                            <h4 class="days">0</h4>
+                            <span>days</span>
+                        </div>
+                        <div class="deadline-format">
+                            <h4 class="hours">0</h4>
+                            <span>hrs</span>
+                        </div>
+                        <div class="deadline-format">
+                            <h4 class="minutes">0</h4>
+                            <span>min</span>
+                        </div>
+                        <div class="deadline-format">
+                            <h4 class="seconds">0</h4>
+                            <span>sec</span>
+                        </div>
                     </div>
                     {% else %}
                         <span class="done-text">Completed</span>
@@ -189,7 +195,7 @@
 
                 <div class="right-control">
                     {% if not todo.done %}
-                    <a href="{% url 'done_view' todo.id %}" class="btn-outline green">Done</a>
+                        <a href="{% url 'done_view' todo.id %}" class="btn-outline green">Done</a>
                     {% endif %}
                     <a href="{% url 'delete_view' todo.id %}" class="btn-outline red">Delete</a>
                 </div>
@@ -200,7 +206,6 @@
         {% endfor %}
     </div>
 
-    <!-- Pagination -->
     <div class="pagination">
         {% if all_todo.has_previous %}
             <a href="?page={{ all_todo.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if category %}&category={{ category }}{% endif %}" class="prev">&laquo; Prev</a>
