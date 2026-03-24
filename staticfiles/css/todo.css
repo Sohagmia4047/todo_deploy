@@ -1,0 +1,126 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #0f172a;
+    color: #e5e7eb;
+    display: flex;
+    justify-content: center;
+    padding-top: 40px;
+}
+
+.container {
+    width: 700px;
+    background: #020617;
+    padding: 25px;
+    border-radius: 12px;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+.add-task {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.add-task input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    background: #020617;
+    border: 1px solid #1e293b;
+    color: #fff;
+    border-radius: 8px;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.btn {
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.file-btn {
+    background: #0284c7;
+    color: #fff;
+}
+
+.add-btn {
+    background: #0ea5e9;
+    color: #fff;
+}
+
+.filters {
+    margin-bottom: 15px;
+}
+
+.filters span {
+    margin-right: 15px;
+    color: #94a3b8;
+    cursor: pointer;
+}
+
+.filters .active {
+    color: #fff;
+    font-weight: bold;
+}
+
+.task-list {
+    list-style: none;
+}
+
+.task {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    background: #020617;
+    border: 1px solid #1e293b;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.task.completed {
+    text-decoration: line-through;
+    color: #64748b;
+}
+
+.task label {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.actions button {
+    margin-left: 8px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.edit {
+    background: #334155;
+    color: #fff;
+}
+
+.delete {
+    background: #ef4444;
+    color: #fff;
+}
+
+.note {
+    color: #94a3b8;
+    font-size: 13px;
+}

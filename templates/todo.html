@@ -1,0 +1,230 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/todo.css' %}">
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Toast Messages -->
+    <div id="toast-container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="toast {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <!-- Form Section -->
+    <section class="form-section">
+
+        <div class="form-topbar">
+            <div class="heading-wrap">
+                <h2 class="head-title">Add New Task</h2>
+                <p class="sub-title">Organize your work and stay productive</p>
+            </div>
+
+            <div class="theme-toggle">
+                <span class="icon">🌙</span>
+                <label class="switch">
+                    <input type="checkbox" id="themeSwitch">
+                    <span class="slider"></span>
+                </label>
+                <span class="icon">☀️</span>
+            </div>
+        </div>
+
+        <!-- Search Form -->
+        <div class="section-card search-card">
+            <form method="get" action="{% url 'todo_view' %}" class="search-form">
+                <div class="section-label">Search Tasks</div>
+
+                <div class="search-grid">
+                    <div class="field-group">
+                        <input
+                            type="text"
+                            name="q"
+                            id="searchInput"
+                            placeholder="Search by title..."
+                            value="{{ query|default:'' }}"
+                        >
+                    </div>
+
+                    <div class="field-group">
+                        <input
+                            type="text"
+                            name="category"
+                            id="searchCategoryInput"
+                            list="categoryList"
+                            placeholder="Search by category..."
+                            value="{{ category|default:'' }}"
+                        >
+                    </div>
+
+                    <datalist id="categoryList">
+                        {% for cat in all_categories %}
+                            <option value="{{ cat }}"></option>
+                        {% endfor %}
+                    </datalist>
+
+                    <button type="submit" class="btn add-btn">🔍 Search</button>
+                    <a href="{% url 'todo_view' %}" class="btn clear-btn reset-link">Reset</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Add / Update Form -->
+        <div class="section-card add-card">
+            <form method="post" action="{% url 'todo_view' %}" enctype="multipart/form-data" id="todoForm">
+                {% csrf_token %}
+                <input type="hidden" name="todo_id" id="todo_id">
+
+                <div class="section-label">Create / Update Task</div>
+
+                <div class="form-grid">
+                    <div class="field-group title-field">
+                        <input
+                            type="text"
+                            name="title"
+                            id="titleInput"
+                            placeholder="Enter task title..."
+                            autocomplete="off"
+                            required
+                        >
+                    </div>
+
+                    <div class="field-group">
+                        <input
+                            type="text"
+                            name="category_name"
+                            id="categoryInput"
+                            list="categoryList"
+                            placeholder="Category (e.g. Work)"
+                            autocomplete="off"
+                        >
+                    </div>
+
+                    <div class="field-group">
+                        <input type="datetime-local" name="end_time" id="endTimeInput" required>
+                    </div>
+
+                    <label class="file-upload">
+                        📎 Upload
+                        <input type="file" name="image" id="imageInput">
+                    </label>
+
+                    <button type="submit" class="btn add-btn" id="submitBtn">➕ Add</button>
+                    <button type="button" class="btn clear-btn" id="clearBtn">✖ Clear</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Todo List -->
+    <div class="todo-list-container">
+        {% for todo in all_todo %}
+        <div class="show-part {% if todo.done %}completed{% endif %}">
+            <div class="left">
+                <div class="todo-item">
+
+                    <div class="todo-item-left">
+                        <label class="todo-check">
+                            <input type="checkbox" {% if todo.done %}checked disabled{% endif %}>
+                            <span class="checkmark"></span>
+                        </label>
+
+                        <div class="todo-content">
+                            <span
+                                class="title"
+                                data-id="{{ todo.id }}"
+                                data-title="{{ todo.title }}"
+                                data-endtime="{{ todo.end_time|date:'Y-m-d\\TH:i' }}"
+                                data-category="{% for cat in todo.categories.all %}{{ cat.category_name }}{% if not forloop.last %}, {% endif %}{% endfor %}"
+                            >
+                                {{ todo.title }}
+                            </span>
+
+                            <div class="category_name">
+                                {% for cat in todo.categories.all %}
+                                    <span class="category-badge">{{ cat.category_name }}</span>
+                                {% empty %}
+                                    <span class="category-badge empty-badge">No Category</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="todo-item-right">
+                        {% if todo.image %}
+                        <span class="todo-image">
+                            <img src="{{ todo.image.url }}" alt="{{ todo.title }}">
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="right">
+                <div class="right-time">
+                    {% if not todo.done %}
+                    <div class="deadline" data-endtime="{{ todo.end_time|date:'c' }}">
+                        <div class="deadline-format"><h4 class="days">0</h4><span>days</span></div>
+                        <div class="deadline-format"><h4 class="hours">0</h4><span>hrs</span></div>
+                        <div class="deadline-format"><h4 class="minutes">0</h4><span>min</span></div>
+                        <div class="deadline-format"><h4 class="seconds">0</h4><span>sec</span></div>
+                    </div>
+                    {% else %}
+                        <span class="done-text">Completed</span>
+                    {% endif %}
+                </div>
+
+                <div class="right-control">
+                    {% if not todo.done %}
+                    <a href="{% url 'done_view' todo.id %}" class="btn-outline green">Done</a>
+                    {% endif %}
+                    <a href="{% url 'delete_view' todo.id %}" class="btn-outline red">Delete</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+            <p class="empty-text">No tasks found.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        {% if all_todo.has_previous %}
+            <a href="?page={{ all_todo.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if category %}&category={{ category }}{% endif %}" class="prev">&laquo; Prev</a>
+        {% else %}
+            <span class="prev disabled">&laquo; Prev</span>
+        {% endif %}
+
+        {% for num in all_todo.paginator.page_range %}
+            {% if num == all_todo.number %}
+                <span class="page active">{{ num }}</span>
+            {% else %}
+                <a href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}{% if category %}&category={{ category }}{% endif %}" class="page">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if all_todo.has_next %}
+            <a href="?page={{ all_todo.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if category %}&category={{ category }}{% endif %}" class="next">Next &raquo;</a>
+        {% else %}
+            <span class="next disabled">Next &raquo;</span>
+        {% endif %}
+    </div>
+
+</div>
+
+<script src="{% static 'js/todo.js' %}"></script>
+</body>
+</html>
